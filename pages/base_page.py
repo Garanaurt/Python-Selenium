@@ -1,13 +1,14 @@
 from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
-import time
+from selenium.common.exceptions import NoAlertPresentException, TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import math
 
 class BasePage():
     def __init__(self, browser, url, timeout=10): #запуск и ожидание
         self.browser = browser
         self.url = url
-        self.browser.implicitly_wait(timeout)
+        #self.browser.implicitly_wait(timeout)
 
     def is_element_present(self, how, what): #проверка есть ли на странице элемент
         try:
@@ -50,5 +51,19 @@ class BasePage():
         price = price_elem.text
         #print(price) #для проверки
         return price
+    
+    def is_not_element_present(self, how, what, timeout=4): # проверка есть элемент или нет и ожидание его появления 
+        try:
+            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return True # не дождался выпала ошибка
+        return False # если дождался появления
+    
+    def is_disappeared(self, how, what, timeout=4): #элемент есть и мы ждем что он пропадёт в течении timeout
+        try:
+            WebDriverWait(self.browser, timeout, 1, TimeoutException).until_not(EC.presence_of_element_located((how, what)))
+        except TimeoutException:
+            return False # False если элемент не исчез
+        return True # True если элемент исчез за это время
     
     

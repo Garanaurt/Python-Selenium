@@ -19,5 +19,12 @@ class ProductPage(BasePage):
     def is_price_added_prod_valid(self): #Проверка цены
         assert self.price_product(*PPL.PRICE_PRODUCT) == self.price_product(*PPL.FIRST_BUY_CART_PRICE), "Цена не ок"
         
-
+    def should_not_be_success_message(self): #проверка что нет элемента с сообщением о добавлении в корзину
+        assert self.is_not_element_present(*ProductPageLocators.ADDED_MESS), \
+            "Сообщение о добавлении в корзину есть, но его сейчас быть не должно"
+    
+    def should_be_success_message(self):
+        assert self.is_disappeared(*ProductPageLocators.ADDED_MESS), "Элемент есть на странице и не пропадает"
+        
+    
 

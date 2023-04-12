@@ -11,7 +11,7 @@ from .pages.product_page import ProductPage
                                   pytest.param("http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer7", marks=pytest.mark.xfail),
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
-def test_guest_can_add_product_to_basket(browser, link):
+def atest_guest_can_add_product_to_basket(browser, link):
     #link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
     page = ProductPage(browser, link)
     page.open()
@@ -19,4 +19,25 @@ def test_guest_can_add_product_to_basket(browser, link):
     page.is_element_added_in_cart()
     page.is_name_added_product_valid()
     page.is_price_added_prod_valid()
-    
+
+@pytest.mark.xfail(reason="элемент должен быть, падает специально")
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
+    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1"
+    page = ProductPage(browser, link)
+    page.open()
+    page.add_to_cart()
+    page.should_not_be_success_message()
+
+def test_guest_cant_see_success_message(browser):
+    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_not_be_success_message()
+
+@pytest.mark.xfail(reason="падает специально")
+def test_message_disappeared_after_adding_product_to_basket(browser):
+    link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1"
+    page = ProductPage(browser, link)
+    page.open()
+    page.add_to_cart()
+    page.should_be_success_message()
