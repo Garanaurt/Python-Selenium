@@ -2,6 +2,15 @@ import pytest
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 
+#Регистрация маркеров
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "user_test: mark test as a user test",
+    )
+    config.addinivalue_line(
+        "markers", "need_review: need review from stepik",
+    )
+
 
 #Обработчики функций
 def pytest_addoption(parser):
